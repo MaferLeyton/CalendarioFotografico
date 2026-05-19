@@ -4,11 +4,11 @@ class ControlarCalendario
 
 {
 
-        public array $listaDeMeses;
+        public $listaDeMeses;
         public int $mesId;
         public string $imagenId;
 
-    public function __construct(array $listaDeMeses)
+    public function __construct( $listaDeMeses)
         {
             $this->listaDeMeses = $listaDeMeses;
         }
@@ -16,13 +16,13 @@ class ControlarCalendario
     public function ObtenerMesesDisponibles() 
         {
             $listaDeIdsDeMeses = [];
-                 foreach ($this->listaDeMeses as $calendario)
+                 foreach ($this->listaDeMeses as $mesId)
                 {
-                    if (in_array($calendario->mes->id, $listaDeIdsDeMeses))
+                    if (in_array($mesId, $listaDeIdsDeMeses))
                         {
                             continue;
                         }
-                        $listaDeIdsDeMeses[] = $calendario->mes->id;
+                        $listaDeIdsDeMeses[] = $mesId;
                 }
             return $listaDeIdsDeMeses;
         }
@@ -30,17 +30,15 @@ class ControlarCalendario
         {
             $meses = [];
 
-            foreach ($this->listaDeMeses as $calendario)
+            foreach ($this->listaDeMeses as $mesId)
             {
-                $id = $calendario->mes->id;
+                $id = $mesId;
 
                 if (!isset($meses[$id]))
                 {
-                    $mes = new Calendario($id);
-                    $meses[$id] = $mes->obtenerNombre();
+                    $meses[$id] = Calendario::obtenerNombre($id);
                 }
             }
-
             return $meses;
         }
     public function ObtenerImagenesDisponibles() 

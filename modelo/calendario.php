@@ -16,17 +16,19 @@ class Calendario
             11 => 'Noviembre', 
             12 => 'Diciembre'
         ];
-
-    public function __construct(private int $id) 
+    private int $id;
+    public function __construct(int $id) 
         {
+            $this->id = $id;
+            
             if ($this->id < 0 || $this->id > 12) 
                 {
                 return "El número del mes debe estar entre 0 y 12.";
                 }
         }
-    public function obtenerNombre () :string
+    public static function obtenerNombre (int $id) :string
         {
-            return self::$nombresMeses[$this->id];
+            return self::$nombresMeses[$id];
         }
 }
 ?>
