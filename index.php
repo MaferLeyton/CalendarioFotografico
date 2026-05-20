@@ -20,6 +20,3 @@ $controlador = new ControlarCalendario($listaDeMeses);
 $mesesIds = $controlador->ObtenerMesesDisponibles();?>
 </body>
 </html>
-
-
- 
