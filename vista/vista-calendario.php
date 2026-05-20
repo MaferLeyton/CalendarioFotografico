@@ -4,7 +4,7 @@ require_once __DIR__ . '/plantilla/boton.php';
 require_once __DIR__ . '/style.php';
 
 ?>
-<form action="index.php" method="POST">
+<form action="index.php?ruta=calendario" method="POST">
     <h3 style="text-shadow:2px 2px 4px #000000">Buscar Carpeta</h3>
     <div class="contenedor">
         <div class="cuadro">

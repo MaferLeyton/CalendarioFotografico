@@ -1,8 +1,29 @@
 <?php
-require_once __DIR__ . '/vista/plantilla/input.php';
-require_once __DIR__ . '/vista/plantilla/select.php';
-require_once __DIR__ . '/vista/plantilla/boton.php';
+require_once __DIR__ . '/plantilla/input.php';
+require_once __DIR__ . '/plantilla/select.php';
+require_once __DIR__ . '/plantilla/boton.php';
+require_once __DIR__ . '/../controlador/base-de-datos.php';
+require_once __DIR__ . '/../modelo/usuario.php';
+require_once __DIR__ . '/../controlador/controlador-usuario.php';
 
+$modeloUsuario = new UsuarioModelo($pdo);
+$controladorDeUsuarios = new ControladorUsuario($modeloUsuario);
+
+$mensajeRegistro = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['password_hash'], $_POST['clave_carpeta'])) {
+    $usuario = new Usuario(null,
+        trim($_POST['email']),
+        trim($_POST['password_hash']),
+        trim($_POST['clave_carpeta'])
+    );
+
+    if ($controladorDeUsuarios->InsertarUsuario($usuario)) {
+        $mensajeRegistro = 'Usuario registrado correctamente.';
+    } else {
+        $mensajeRegistro = 'No se pudo registrar el usuario.';
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +71,7 @@ require_once __DIR__ . '/vista/plantilla/boton.php';
         </style>
 </head>
 <body>
-<form action="index.php" method="POST">
+<form action="index.php?ruta=login" method="POST">
     <div class="contenedor">
         <h2>Buscar Usuario</h2>
 
@@ -66,16 +87,9 @@ require_once __DIR__ . '/vista/plantilla/boton.php';
     
     </div>
 </form>
+
+<?php if ($mensajeRegistro !== ''): ?>
+    <p><?php echo htmlspecialchars($mensajeRegistro, ENT_QUOTES, 'UTF-8'); ?></p>
+<?php endif; ?>
 </body>
 </html>
-<?php
-if(isset($_POST["email"]))
-    { 
-        echo "hola";
-        $usuario = new Usuario("", 
-                            $_POST["email"], 
-                            $_POST["password_hash"], 
-                            $_POST["clave_carpeta"]);
-        $controladorDeUsuarios->InsertarUsuario($usuario);
-    }
-?>
