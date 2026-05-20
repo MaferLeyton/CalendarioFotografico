@@ -1,4 +1,7 @@
 <?php
+ require_once __DIR__ . '/vista/inicializador-vista.php';
+
+    echo "aqui estoy";
 require_once __DIR__ . '/modelo/inicializador-modelo.php';
 require_once __DIR__ . '/controlador/inicializador-controlador.php';
 ?>
@@ -12,9 +15,7 @@ require_once __DIR__ . '/controlador/inicializador-controlador.php';
     <h3>Calendario Fotografico</h3>
     
     <?php 
-    require_once __DIR__ . '/vista/inicializador-vista.php';
-
-    echo "aqui estoy";
+   
         
     $listaDeMeses = [1];
     $controlador = new ControlarCalendario($listaDeMeses);
