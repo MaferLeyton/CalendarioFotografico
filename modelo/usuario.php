@@ -6,7 +6,7 @@ class Usuario
     public string $password_hash;
     public string $clave_carpeta;
 
-    public function __construct(?int $id, string $email, string $password_hash, string $clave_carpeta)
+    public function __construct(?int $id, string $email, string $password_hash, string $clave_carpeta, )
     {
         $this->id = $id;
         $this->email = $email;
@@ -39,12 +39,12 @@ class UsuarioModelo
     public function Insertar(Usuario $usuario): bool
     {
         try {
-            $sql = "INSERT INTO usuarios (email, password_hash, clave_carpeta) VALUES (:email, :password_hash, :clave_carpeta)";
+            $sql = "INSERT INTO usuario (email, password_hash, clave_carpeta) VALUES (:email, :password_hash, :clave_carpeta)";
             $stmt = $this->pdo->prepare($sql);
             return $stmt->execute([
                 ':email' => $usuario->email,
                 ':password_hash' => $usuario->password_hash,
-                ':clave_carpeta' => $usuario->clave_carpeta,
+                ':clave_carpeta' => $usuario->clave_carpeta
             ]);
         } catch (PDOException $e) {
             die("Error en el modelo al insertar el usuario: " . $e->getMessage());

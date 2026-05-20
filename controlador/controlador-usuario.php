@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../modelo/usuario.php';
 
 class ControladorUsuario
 {

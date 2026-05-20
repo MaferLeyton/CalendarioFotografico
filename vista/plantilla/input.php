@@ -13,4 +13,10 @@ function MostrarInputMail (string $nombre, string $nombreParaMostrar, string $id
         $espacioPosterior = "<br><br>";
         echo $etiqueta.$input.$espacioPosterior;
      }
+function MostrarInputDate (string $nombre, string $nombreParaMostrar, string $id)
+     {
+        $etiqueta = "<label date for=\"$id\">$nombreParaMostrar  </label>";
+        $input = "<input type=\"date\" id=\"$id\" name=\"$nombre\">";
+        $espacioPosterior = "<br><br>";
+        echo $etiqueta.$input.$espacioPosterior;}
 ?>

@@ -7,9 +7,9 @@ class ControlarCalendario
     public string $imagenId = '';
 
     public function __construct(array $listaDeMeses)
-    {
-        $this->listaDeMeses = $listaDeMeses;
-    }
+        {
+            $this->listaDeMeses = $listaDeMeses;
+        }
 
     public function ObtenerMesesDisponibles()
     {

@@ -15,13 +15,6 @@ class Imagen
         $this->fechaDeCreacion = $fechaDeCreacion;
     }
 
-    public function llamarImagenes () : array
-        {
-            return glob(
-                $this->carpeta . '*.{jpg, jpeg, png}',
-                GLOB_BRACE
-            );
-        }
     
     public function llamarFecha() : string 
 
