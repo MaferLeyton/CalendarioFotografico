@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . 'vista/plantilla/input.php';
-require_once __DIR__ . 'vista/plantilla/select.php';
-require_once __DIR__ . 'vista/plantilla/boton.php';
+require_once __DIR__ . '/vista/plantilla/input.php';
+require_once __DIR__ . '/vista/plantilla/select.php';
+require_once __DIR__ . '/vista/plantilla/boton.php';
 
 ?>
 
