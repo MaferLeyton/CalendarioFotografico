@@ -7,6 +7,7 @@
             <label for="email">Correo electrónico</label>
 
             <?php
+            echo "aqui estoy";
         MostrarInputMail("mail", "<strong>Correo Electronico:</strong><br>", "mail");
         MostrarInputText("password_hash", "<strong>Contraseña:</strong><br>", "password_hash");
         MostrarInputText("clave_carpeta", "<strong>Carpeta:</strong><br>", "clave_carpeta");
