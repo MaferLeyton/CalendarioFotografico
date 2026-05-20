@@ -43,7 +43,7 @@
         </style>
 </head>
 <body>
-
+<form action="index.php" method="POST">
     <div class="contenedor">
         <h2>Buscar Usuario</h2>
 
@@ -60,7 +60,7 @@
     
         </form>
     </div>
-
+</form>
 </body>
 </html>
 <?php
