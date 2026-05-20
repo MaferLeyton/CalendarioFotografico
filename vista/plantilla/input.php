@@ -6,4 +6,11 @@ function MostrarInputText(string $nombre, string $nombreParaMostrar, string $id)
         $espacioPosterior = "<br><br>";
         echo $etiqueta.$input.$espacioPosterior;
     }
+function MostrarInputMail (string $nombre, string $nombreParaMostrar, string $id)
+     {
+        $etiqueta = "<label mail for=\"$id\">$nombreParaMostrar  </label>";
+        $input = "<input type=\"email\" id=\"$id\" name=\"$nombre\">";
+        $espacioPosterior = "<br><br>";
+        echo $etiqueta.$input.$espacioPosterior;
+     }
 ?>

@@ -1,3 +1,7 @@
+
+
+// Estilos para la galería de fotos
+
 <style>
     body {
         font-family: Arial, sans-serif;

@@ -12,6 +12,7 @@ require_once __DIR__ . '/modelo/inicializador-modelo.php';
     
     <?php 
     require_once __DIR__ . '/vista/vista-calendario.php'; 
+    require_once __DIR__ . '/vista/vista-login.php';
     require_once __DIR__ . '/../controlador/inicializador-controlador.php';
     echo "aqui estoy";
     
