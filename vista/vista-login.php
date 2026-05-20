@@ -1,3 +1,10 @@
+<?php
+require_once __DIR__ . 'vista/plantilla/input.php';
+require_once __DIR__ . 'vista/plantilla/select.php';
+require_once __DIR__ . 'vista/plantilla/boton.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -47,28 +54,26 @@
     <div class="contenedor">
         <h2>Buscar Usuario</h2>
 
-        <form action="buscar_usuario.php" method="POST">
             <label for="email">Correo electrónico</label>
 
             <?php
             echo "aqui estoy";
-        MostrarInputMail("mail", "<strong>Correo Electronico:</strong><br>", "mail");
+        MostrarInputMail("email", "<strong>Correo Electronico:</strong><br>", "email");
         MostrarInputText("password_hash", "<strong>Contraseña:</strong><br>", "password_hash");
         MostrarInputText("clave_carpeta", "<strong>Carpeta:</strong><br>", "clave_carpeta");
-        MostrarBoton("Buscar Usuario");
+        MostrarBoton("Registrar Usuario", "submit", "registrar_usuario");
             ?>
     
-        </form>
     </div>
 </form>
 </body>
 </html>
 <?php
-if(isset($_POST["numeroDeIdentificacionPersonal"]))
+if(isset($_POST["email"]))
     { 
         echo "hola";
         $usuario = new Usuario("", 
-                            $_POST["mail"], 
+                            $_POST["email"], 
                             $_POST["password_hash"], 
                             $_POST["clave_carpeta"]);
         $controladorDeUsuarios->InsertarUsuario($usuario);
