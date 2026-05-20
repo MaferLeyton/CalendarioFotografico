@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/modelo/inicializador-modelo.php';
+require_once __DIR__ . '/controlador/inicializador-controlador.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
