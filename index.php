@@ -1,10 +1,14 @@
 <?php
  require_once __DIR__ . '/vista/inicializador-vista.php';
 
+/*
     echo "aqui estoy";
-require_once __DIR__ . '/modelo/inicializador-modelo.php';
-require_once __DIR__ . '/controlador/inicializador-controlador.php';
+    require_once __DIR__ . '/modelo/inicializador-modelo.php';
+    require_once __DIR__ . '/controlador/inicializador-controlador.php';
+*/
+exit;
 ?>
+<!--
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -19,7 +23,7 @@ require_once __DIR__ . '/controlador/inicializador-controlador.php';
         
     $listaDeMeses = [1];
     $controlador = new ControlarCalendario($listaDeMeses);
-    $mesesIds = $controlador->ObtenerMesesDisponibles();
     ?>
 </body>
 </html>
+-->
