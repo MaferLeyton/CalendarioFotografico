@@ -2,7 +2,7 @@
 class Imagen
 {
 
-    private string $carpeta = 'fotos/';
+    private string $carpeta = 'anuario-de-fotos/';
     public string $nombre;
     public TipoDeImagen $tiposPermitidos;
     public DateTime $fechaDeCreacion;

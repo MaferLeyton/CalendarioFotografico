@@ -1,5 +1,5 @@
 <?php
-require_once '/modelo/calendario.php';
-require_once '/modelo/imagen.php';
-require_once '/modelo/meses.php';
+require_once __DIR__ . '/calendario.php';
+require_once __DIR__ . '/imagen.php';
+require_once __DIR__ . '/meses.php';
 ?>
