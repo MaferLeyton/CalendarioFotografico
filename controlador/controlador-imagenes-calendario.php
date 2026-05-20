@@ -2,118 +2,66 @@
 
 class ControlarImagenesCalendario
 {
-    public array $listaDeMeses;
-    public int $mesId = 0;
-    public string $imagenId = '';
+    private array $listaDeMeses;
 
     public function __construct(array $listaDeMeses)
     {
-        $this->listaDeMeses = $listaDeMeses;    
-    }                        
-        public function obtenerImagenesPorId(string $imagenId): array 
-                {
-                    $imagenes =[];
-                    foreach ($this->listaDeMeses as $calendario)
-                        {
-                            if ($calendario->imagen->id == $this->imagenId)
-                                    {
-                                        $imagenes[] = $calendario->imagen;
-                                    }
-                        }
-                        return $imagenes;
-                }
-    
-        public function obtenerImagenesPorMes(int $mesBuscado): array
-                {
-                    $imagenesFiltradas = [];
-                    foreach ($this->listaDeMeses as $calendario)
-                        {
-                            $fecha = $calendario->imagen->fecha;
-                            $numeroMes = (int) date("n", strtotime($fecha));
-                            
-                            if ($numeroMes === $mesBuscado)
-                                {
-                                    $imagenesFiltradas[] = $calendario->imagen;
-                                }
-                        }
-                    return $this->obtenerImagenesOrdenadasPorFecha($imagenesFiltradas);
-                }
-                    
-        public function obtenerImagenesOrdenadasPorFecha()
-            {
-                $imagenes = [];
-            
-                foreach ($this->listaDeMeses as $calendario)
-                        {
-                            $imagenes[] = $calendario->imagen;
-                        }
-                usort($imagenes, function($a, $b)
-                        {
-                            return strtotime($a->fecha) - strtotime($b->fecha);
-                        });
-                return $imagenes;
-            }
+        $this->listaDeMeses = $listaDeMeses;
+    }
 
-    public function contarImagenesPorMes(string $directorioBase, int $mesSeleccionado): int
-        {
-            $this->directorioBase = $directorioBase;
-            $this->mesSeleccionado = $mesSeleccionado;
-        
-        if (!is_dir($directorioBase)) {
-                return 0;
-            }
+    public function obtenerImagenesOrdenadasPorFecha(): array
+    {
+        $imagenes = [];
 
-            if ($mesSeleccionado === 0) {
-                $total = 0;
-                for ($mes = 1; $mes <= 12; $mes++) {
-                    $directorioMes = $directorioBase . DIRECTORY_SEPARATOR . ObtenerNombreMesSeleccionado($mes);
-                    $total += ContarImagenesEnDirectorio($directorioMes);
-                }
-                return $total;
+        foreach ($this->listaDeMeses as $calendario) {
+            if (isset($calendario->imagen)) {
+                $imagenes[] = $calendario->imagen;
             }
-
-            $directorioMes = $directorioBase . DIRECTORY_SEPARATOR . ObtenerNombreMesSeleccionado($mesSeleccionado);
-            return ContarImagenesEnDirectorio($directorioMes);
         }
 
-    public function contarImagenesEnCarpeta(string $directorio): int
-        {
-            if (!is_dir($directorio)) {
-                return 0;
+        return $this->ordenarPorFecha($imagenes);
+    }
+
+    public function obtenerImagenesPorMes(int $mesBuscado): array
+    {
+        $imagenesFiltradas = [];
+
+        foreach ($this->listaDeMeses as $calendario) {
+            if (!isset($calendario->imagen->fecha)) {
+                continue;
             }
 
-            $extensiones = ['jpg', 'jpeg', 'png', 'jfif'];
-            $contador = 0;
-            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directorio, FilesystemIterator::SKIP_DOTS));
+            $fecha = $calendario->imagen->fecha;
+            $numeroMes = (int) date('n', strtotime($fecha));
 
-            foreach ($iterator as $archivo) {
-                if (!$archivo->isFile()) {
-                    continue;
-                }
-
-                $extension = strtolower($archivo->getExtension());
-                if (in_array($extension, $extensiones, true)) {
-                    $contador++;
-                }
+            if ($numeroMes === $mesBuscado) {
+                $imagenesFiltradas[] = $calendario->imagen;
             }
-
-            return $contador;
         }
 
-        public function obtenerImagenIdDesdeRequest (): ?string
+        return $this->ordenarPorFecha($imagenesFiltradas);
+    }
 
-         {
-             return $_GET["imagen"] ?? null;
+    public function obtenerImagenesPorId(string $imagenId): array
+    {
+        $imagenes = [];
+
+        foreach ($this->listaDeMeses as $calendario) {
+            if (isset($calendario->imagen->id) && $calendario->imagen->id == $imagenId) {
+                $imagenes[] = $calendario->imagen;
+            }
         }
-        
-        public function ordenarPorFecha(array $imagenes) :array
-        {
-            usort($imagenes, function($a, $b)
-                 {
-                    return strtotime($a->fecha) - strtotime($b->fecha);
-                });
-                        
-             return $imagenes;
-        }
+
+        return $imagenes;
+    }
+
+    public function ordenarPorFecha(array $imagenes): array
+    {
+        usort($imagenes, function ($a, $b) {
+            return strtotime($a->fecha) - strtotime($b->fecha);
+        });
+
+        return $imagenes;
+    }
 }
 ?>
