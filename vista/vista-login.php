@@ -11,6 +11,7 @@ $controladorDeUsuarios = new ControladorUsuario($modeloUsuario);
 
 $mensajeRegistro = '';
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['password_hash'], $_POST['clave_carpeta'])) {
     $usuario = new Usuario(null,
         trim($_POST['email']),
@@ -19,7 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'], $_POST['pass
     );
 
     if ($controladorDeUsuarios->InsertarUsuario($usuario)) {
-        $mensajeRegistro = 'Usuario registrado correctamente.';
+        header("Location: vista/vista-calendario.php");
+        exit;
     } else {
         $mensajeRegistro = 'No se pudo registrar el usuario.';
     }

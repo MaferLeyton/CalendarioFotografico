@@ -14,8 +14,18 @@ class Imagen
         $this->tiposPermitidos = $tiposPermitidos;
         $this->fechaDeCreacion = $fechaDeCreacion;
     }
+//retomar la imagen desde el archivo con la fecha de creación
+    public static function desdeArchivo(string $ruta, TipoDeImagen $tipo): self
+    {
+        $carpeta = dirname($ruta);
+        $nombre = basename($ruta);
 
-    
+        $fecha = new DateTime();
+        $fecha->setTimestamp(filemtime($ruta));
+
+        return new self($carpeta, $nombre, $tipo, $fecha);
+    }
+
     public function llamarFecha() : string 
 
         {

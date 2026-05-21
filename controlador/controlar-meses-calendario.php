@@ -11,7 +11,7 @@ class ControlarCalendario
             $this->listaDeMeses = $listaDeMeses;
         }
 
-    public function ObtenerMesesDisponibles()
+    public function ObtenerMesesDisponiblesConFotos()
     {
         $listaDeIdsDeMeses = [];
         foreach ($this->listaDeMeses as $mesItem) {
@@ -26,7 +26,7 @@ class ControlarCalendario
         }
         return $listaDeIdsDeMeses;
     }
-    public function ObtenerMesesDisponiblesConNombre(): array
+    public function ObtenerMesesDisponiblesConFotosConNombre(): array
         {
             $meses = [];
 
@@ -41,5 +41,40 @@ class ControlarCalendario
             }
             return $meses;
         }
+
+
+
+    public function __construct(array $listaDeMeses = [])
+    {
+        $this->listaDeMeses = $listaDeMeses;
+    }
+
+public function generarAlmanaqueMensual(array $imagenes): array
+    {
+        $almanaque = [];
+        foreach ($imagenes as $imagen) {
+            if (!isset($imagen->fecha)) {
+                continue;
+            }
+            $fecha = date('Y-m-d', strtotime($imagen->fecha));
+            $almanaque[$fecha] = $imagen;
+        }
+        ksort($almanaque);
+        return $almanaque;
+    }
+     
+    public function generarAlmanaqueAnual(array $imagenes): array
+    {
+        $almanaque = [];
+        foreach ($imagenes as $imagen) {
+            if (!isset($imagen->fecha)) {
+                continue;
+            }
+            $fecha = date('Y-m-d', strtotime($imagen->fecha));
+            $almanaque[$fecha] = $imagen;
+        }
+        ksort($almanaque);
+        return $almanaque;
+    }
 }
 ?>
