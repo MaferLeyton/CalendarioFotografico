@@ -3,8 +3,8 @@
 class ControladorDeImagen
 {
     private static array $extensiones = ['jpg', 'jpeg', 'png', 'jfif'];
-        
-    //llamar imagenes de carpeta
+
+    // Llama imágenes de una carpeta
     public function llamarImagenesDeCarpeta(string $directorio): array
     {
         $imagenes = [];
@@ -25,16 +25,19 @@ class ControladorDeImagen
         }
         return $imagenes;
     }
-    
-    //ordenar imágenes por fechaDeCreacion
-    private function ordenarPorfechaDeCreacion(array $imagenes): array
+
+    // Ordenar imágenes por fecha de creación (asume array de objetos con propiedad fechaDeCreacion tipo DateTime)
+    public function ordenarPorFechaDeCreacion(array $imagenes): array
     {
-            usort($imagenes, function ($a, $b) {
-            return ($a->fechaDeCreacion ?? '') <=> ($b->fechaDeCreacion ?? '');
-        });    
-            return $imagenes;
+        usort($imagenes, function ($a, $b) {
+            $fechaA = $a->fechaDeCreacion instanceof DateTime ? $a->fechaDeCreacion->getTimestamp() : strtotime($a->fechaDeCreacion ?? '');
+            $fechaB = $b->fechaDeCreacion instanceof DateTime ? $b->fechaDeCreacion->getTimestamp() : strtotime($b->fechaDeCreacion ?? '');
+            return $fechaA <=> $fechaB;
+        });
+        return $imagenes;
     }
-    //agrupar imágenes por día
+
+    // Agrupar imágenes por día
     public function agruparImagenesPorDia(array $imagenes): array
     {
         $agrupadas = [];
@@ -42,32 +45,33 @@ class ControladorDeImagen
             if (!isset($imagen->fechaDeCreacion)) {
                 continue;
             }
-            $fechaDeCreacion = $imagen->fechaDeCreacion->format('Y-m-d');
-            if (!isset($agrupadas[$fechaDeCreacion])) {
-                $agrupadas[$fechaDeCreacion] = [];
-            }
-            $agrupadas[$fechaDeCreacion][] = $imagen;
+            $fecha = $imagen->fechaDeCreacion instanceof DateTime
+                ? $imagen->fechaDeCreacion->format('Y-m-d')
+                : date('Y-m-d', strtotime($imagen->fechaDeCreacion));
+            $agrupadas[$fecha][] = $imagen;
         }
         return $agrupadas;
     }
-    //seleccionar imagen por día-- reconfigurar a seleccionar una unica imagen por dia y si no imprime "no existe foto de dia"
+
+    // Seleccionar una imagen por día (la más antigua)
     public function seleccionarImagenPorDia(array $imagenes): array
     {
         $seleccionadas = [];
-        foreach ($imagenes as $imagen) {               
+        foreach ($imagenes as $imagen) {
             if (!isset($imagen->fechaDeCreacion)) {
                 continue;
             }
-            $fechaDeCreacion = $imagen->fechaDeCreacion->format('Y-m-d');
-            
-            if (!isset($seleccionadas[$fechaDeCreacion]) || ($imagen->fechaDeCreacion) < ($seleccionadas[$fechaDeCreacion]->fechaDeCreacion)) {
-                $seleccionadas[$fechaDeCreacion] = $imagen;
+            $fecha = $imagen->fechaDeCreacion instanceof DateTime
+                ? $imagen->fechaDeCreacion->format('Y-m-d')
+                : date('Y-m-d', strtotime($imagen->fechaDeCreacion));
+            if (!isset($seleccionadas[$fecha]) || $imagen->fechaDeCreacion < $seleccionadas[$fecha]->fechaDeCreacion) {
+                $seleccionadas[$fecha] = $imagen;
             }
-            return array_values($seleccionadas);
-            }
+        }
+        return array_values($seleccionadas);
     }
-//agrupar imágenes por mes
 
+    // Agrupar imágenes por mes
     public function agruparImagenesPorMes(array $imagenes): array
     {
         $agrupadas = [];
@@ -75,32 +79,31 @@ class ControladorDeImagen
             if (!isset($imagen->fechaDeCreacion)) {
                 continue;
             }
-            $fechaDeCreacion = $imagen->fechaDeCreacion->format('Y-m-d');
-            if (!isset($agrupadas[$fechaDeCreacion])) {
-                $agrupadas[$fechaDeCreacion] = [];
-            }
-            $agrupadas[$fechaDeCreacion][] = $imagen;
+            $mes = $imagen->fechaDeCreacion instanceof DateTime
+                ? $imagen->fechaDeCreacion->format('Y-m')
+                : date('Y-m', strtotime($imagen->fechaDeCreacion));
+            $agrupadas[$mes][] = $imagen;
         }
         return $agrupadas;
     }
-    //obtener imágenes ordenadas por fechaDeCreacion y filtradas por mes  
 
-    public function obtenerImagenesPorMes(int $mesBuscado): array
+    // Agrupar imágenes por año
+    public function agruparImagenesPorAno(array $imagenes): array
     {
-        $imagenesFiltradas = [];
-        foreach ($this->listaDeMeses as $calendario) {
-            if (!isset($calendario->imagen->fechaDeCreacion)) {
+        $agrupadas = [];
+        foreach ($imagenes as $imagen) {
+            if (!isset($imagen->fechaDeCreacion)) {
                 continue;
             }
-            $fechaDeCreacion = $calendario->imagen->fechaDeCreacion;
-            $numeroMes = (int) date('n', ($fechaDeCreacion));
-            if ($numeroMes === $mesBuscado) {
-                $imagenesFiltradas[] = $calendario->imagen;
-            }
+            $ano = $imagen->fechaDeCreacion instanceof DateTime
+                ? $imagen->fechaDeCreacion->format('Y')
+                : date('Y', strtotime($imagen->fechaDeCreacion));
+            $agrupadas[$ano][] = $imagen;
         }
-        return $this->ordenarPorfechaDeCreacion($imagenesFiltradas);
+        return $agrupadas;
     }
-//conteo de imágenes en carpeta
+
+    // Contar imágenes en carpeta
     public static function contarImagenesEnCarpeta(string $directorio): int
     {
         if (!is_dir($directorio)) {
@@ -122,6 +125,7 @@ class ControladorDeImagen
         return $contador;
     }
 
+    // Contar imágenes por mes
     public static function contarImagenesPorMes(string $directorioBase, int $mesSeleccionado): int
     {
         if (!is_dir($directorioBase)) {
@@ -138,5 +142,38 @@ class ControladorDeImagen
         $directorioMes = $directorioBase . DIRECTORY_SEPARATOR . Calendario::obtenerNombre($mesSeleccionado);
         return self::contarImagenesEnCarpeta($directorioMes);
     }
+
+    // Organizar imágenes por mes: mueve imágenes a subcarpetas según su mes de creación
+    public static function organizarFotosPorMes(string $directorioBase): int
+    {
+        if (!is_dir($directorioBase)) {
+            return 0;
+        }
+        $moved = 0;
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directorioBase, FilesystemIterator::SKIP_DOTS)
+        );
+        foreach ($iterator as $archivo) {
+            if (!$archivo->isFile()) {
+                continue;
+            }
+            $extension = strtolower($archivo->getExtension());
+            if (!in_array($extension, self::$extensiones, true)) {
+                continue;
+            }
+            $fecha = new DateTime('@' . $archivo->getMTime());
+            $mes = $fecha->format('m');
+            $ano = $fecha->format('Y');
+            $nombreMes = $fecha->format('F'); // Ej: January, February...
+            $destinoDir = $directorioBase . DIRECTORY_SEPARATOR . $ano . '-' . $nombreMes;
+            if (!is_dir($destinoDir)) {
+                mkdir($destinoDir, 0777, true);
+            }
+            $destino = $destinoDir . DIRECTORY_SEPARATOR . $archivo->getFilename();
+            if (rename($archivo->getPathname(), $destino)) {
+                $moved++;
+            }
+        }
+        return $moved;
+    }
 }
-?>

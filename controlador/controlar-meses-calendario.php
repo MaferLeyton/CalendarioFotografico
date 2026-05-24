@@ -10,6 +10,7 @@ class ControlarCalendario
         {
             $this->listaDeMeses = $listaDeMeses;
         }
+//meses disponibles con fotos
 
     public function ObtenerMesesDisponiblesConFotos()
     {
@@ -26,7 +27,8 @@ class ControlarCalendario
         }
         return $listaDeIdsDeMeses;
     }
-    public function ObtenerMesesDisponiblesConFotosConNombre(): array
+
+    public function ObtenerMesesDisponiblesConFotosConNombreMes(): array
         {
             $meses = [];
 
@@ -42,21 +44,14 @@ class ControlarCalendario
             return $meses;
         }
 
-
-
-    public function __construct(array $listaDeMeses = [])
-    {
-        $this->listaDeMeses = $listaDeMeses;
-    }
-
 public function generarAlmanaqueMensual(array $imagenes): array
     {
         $almanaque = [];
         foreach ($imagenes as $imagen) {
-            if (!isset($imagen->fecha)) {
+            if (!isset($imagen->fechaDeCreacion)) {
                 continue;
             }
-            $fecha = date('Y-m-d', strtotime($imagen->fecha));
+            $fecha = date('Y-m-d', strtotime($imagen->fechaDeCreacion));
             $almanaque[$fecha] = $imagen;
         }
         ksort($almanaque);
@@ -67,14 +62,20 @@ public function generarAlmanaqueMensual(array $imagenes): array
     {
         $almanaque = [];
         foreach ($imagenes as $imagen) {
-            if (!isset($imagen->fecha)) {
+            if (!isset($imagen->fechaDeCreacion)) {
                 continue;
             }
-            $fecha = date('Y-m-d', strtotime($imagen->fecha));
+            $fecha = date('Y-m-d', strtotime($imagen->fechaDeCreacion));
             $almanaque[$fecha] = $imagen;
         }
         ksort($almanaque);
         return $almanaque;
     }
+    public function obtenerRutaCompleta(): string
+{
+    return $this->carpeta .
+           DIRECTORY_SEPARATOR .
+           $this->nombre;
+}
 }
 ?>

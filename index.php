@@ -24,4 +24,7 @@
    $listaDeMeses = [1];
     $controlador = new ControlarCalendario($listaDeMeses);
     echo "aqui estare";
+    
+    $controladordePdf = new ControlarPDF();
+    $controladordePdf->generarPDF();
 ?>
